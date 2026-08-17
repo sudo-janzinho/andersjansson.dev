@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gui SK - Fotball | Fritidsaktiviteter i Asker</title>
+<style>
+  :root { --blue: #1a5fb4; --light: #f4f6f9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--light); color: #222; }
+  header { background: var(--blue); color: #fff; padding: 2rem 1rem 1.5rem; text-align: center; }
+  header h1 { font-size: 1.6rem; margin-bottom: .3rem; }
+  header p { opacity: .9; font-size: .95rem; }
+  .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); padding: 1.5rem; margin-bottom: 1.5rem; }
+  .card h2 { font-size: 1.3rem; color: var(--blue); margin-bottom: .4rem; }
+  .icon { margin-bottom: 1rem; }
+  .icon svg { width: 48px; height: 48px; stroke: #000; stroke-width: 2; }
+  .activity-title { font-size: 1rem; font-weight: 700; color: #333; margin-bottom: 1rem; }
+  .contact { font-size: .95rem; line-height: 1.8; }
+  .contact a { color: var(--blue); text-decoration: none; }
+  .contact a:hover { text-decoration: underline; }
+  .desc { font-size: .9rem; color: #555; margin-top: 1rem; line-height: 1.6; }
+  .back { display: inline-block; margin-top: 1.5rem; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .back:hover { text-decoration: underline; }
+  h3 { color: var(--blue); margin: 1.5rem 0 .6rem; font-size: 1.15rem; }
+  .fargekode { font-size: .85rem; color: #666; margin-bottom: .8rem; }
+  .lagtabell { width: 100%; border-collapse: collapse; font-size: .88rem; margin-bottom: 1rem; }
+  .lagtabell th { background: var(--blue); color: #fff; text-align: left; padding: .5rem .6rem; }
+  .lagtabell td { padding: .5rem .6rem; border-bottom: 1px solid #e3e7ee; }
+  .lagtabell tr:nth-child(even) td { background: #f7f9fc; }
+  .lagtabell td:first-child { white-space: nowrap; }
+  footer { text-align: center; padding: 1.5rem; color: #888; font-size: .8rem; }
+  /* URL-länkar visas på en rad, klipps med "..." om för långa */
+  .contact .url-link {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Fritidsaktiviteter i Asker</h1>
+  <p>Gui SK - Fotball</p>
+</header>
+<div class="container">
+  <div class="card">
+<div class="icon"><span style="font-size:48px;line-height:1;">⚽</span></div>
+    <h2>Gui SK - Fotball</h2>
+    <h4 class="activity-title">Fotball</h4>
+    <div class="contact">
+      <div><strong>Kontakt:</strong> Geir Andersen</div>
+      <div><strong>Tlf:</strong> <a href="tel:91188639">91 18 86 39</a></div>
+      <div><strong>E-post:</strong> <a href="mailto:geirandersen1975@gmail.com">geirandersen1975@gmail.com</a></div>
+      <div><strong>Nettside:</strong> <a class="url-link" href="https://www.guisk.no/v%C3%A5re_lag" target="_blank" rel="noopener" title="https://www.guisk.no/v%C3%A5re_lag">https://www.guisk.no/v%C3%A5re_lag</a></div>
+    </div>
+    <p class="desc">Fotball – Norges største lagidrett. Trening og kamper for barn, ungdom og voksne.</p>
+  </div>
+
+  <div class="card">
+    <h2>Lag og kontaktinfo</h2>
+    <p class="fargekode">Fargekode: Hvit = Heggedal, Blå = Vollen</p>
+
+    <h3>Gutter</h3>
+    <table class="lagtabell gutter"><thead><tr><th>Lag</th><th>Fødselsår</th><th>Lagleder</th><th>Tlf</th><th>Trener</th><th>Tlf</th></tr></thead><tbody><tr><td><strong></strong></td><td>Fødselsår</td><td>Lagleder</td><td>Tlf</td><td>Trener</td><td>Tlf</td></tr><tr><td><strong>A-lag</strong></td><td>A-lag</td><td>Kurt Bakkejord</td><td>94181938</td><td>Fredrik Bøe</td><td>97653685</td></tr><tr><td><strong>B-lag</strong></td><td>Senior</td><td>Sindre Amland</td><td>97415471</td><td>Sindre Amland</td><td>97415471</td></tr><tr><td><strong>Old-boys</strong></td><td>Heggedal</td><td>Thomas Schoopp</td><td>97970904</td><td></td><td></td></tr><tr><td><strong>Old-boys</strong></td><td>Vollen + 40</td><td>Ivar Lofterød</td><td>99467600</td><td></td><td></td></tr><tr><td><strong>G16</strong></td><td>2010</td><td>Thomas W Tønnesen</td><td>97765548</td><td>Diogo Rodrigues</td><td>93456224</td></tr><tr><td><strong>G15</strong></td><td>2011</td><td>Morten Barton</td><td>91129782</td><td>Helder Fernandes</td><td></td></tr><tr><td><strong>G14</strong></td><td>2012</td><td>Hege Marie Herregarden</td><td>41403438</td><td>Paul Borge</td><td>47733846</td></tr><tr><td><strong>G13</strong></td><td>2013</td><td>Robin Christoffersen</td><td>46652756</td><td>Tomas Faria</td><td>+351 968 096 309</td></tr><tr><td><strong>G12</strong></td><td>2014</td><td>Trygve Jordheim</td><td>97071856</td><td>Fredrik H Bøe</td><td>97653685</td></tr><tr><td><strong>G11</strong></td><td>2015</td><td>Lene Andersson</td><td>95150240</td><td>Sindre Amland</td><td>97415471</td></tr><tr><td><strong>G10 Hvit</strong></td><td>2016</td><td>Monica Lyngmo</td><td>98088521</td><td>Christoffer Rudbeck</td><td>98889781</td></tr><tr><td><strong>G10 Blå</strong></td><td>2016</td><td>Njaal Borchgrevink Brøvig</td><td>93265225</td><td>Espen S. Kristiansen</td><td>91605566</td></tr><tr><td><strong>G09 Hvit</strong></td><td>2017</td><td>Remi Andre Bjørnstad</td><td>94287585</td><td>Remi Andre Bjørnstad</td><td>94287585</td></tr><tr><td><strong>G09 Blå</strong></td><td>2017</td><td>Katinka Borch-Nielsen Thorkildsen</td><td>47885120</td><td>Katinka Borch-Nielsen Thorkildsen</td><td>47885120</td></tr><tr><td><strong>G08 Hvit</strong></td><td>2018</td><td>Gaylee Dalsegg</td><td>48689920</td><td>Mattias Torske Bøhmer</td><td>47627899</td></tr><tr><td><strong>G08 Blå</strong></td><td>2018</td><td>Lars Astad</td><td>93425360</td><td></td><td></td></tr><tr><td><strong>G07 Hvit</strong></td><td>2019</td><td>Anders Øvergaard</td><td>41509977</td><td>Anders Øvergaard</td><td>41509977</td></tr><tr><td><strong>G07 Blå</strong></td><td>2019</td><td>Franco Roche</td><td>95799894</td><td>Franco Roche</td><td>95799894</td></tr><tr><td><strong>G06 Blå</strong></td><td>2020</td><td>Yaw Amankwah</td><td>98632113</td><td>Yaw Amankwah</td><td>98632113</td></tr><tr><td><strong>G06 Hvit</strong></td><td>2020</td><td>Anders Grønning</td><td>95793435</td><td>Anders Grønning</td><td>95793435</td></tr></tbody></table>
+
+    <h3>Jenter</h3>
+    <table class="lagtabell jenter"><thead><tr><th>Lag</th><th>Fødselsår</th><th>Lagleder</th><th>Tlf</th><th>Trener</th><th>Tlf</th></tr></thead><tbody><tr><td><strong>A-lag</strong></td><td></td><td>Erik Holstad</td><td>91609868</td><td>Tore-Jan Jordan</td><td>99500792</td></tr><tr><td><strong>J19</strong></td><td>2007-2009</td><td>Tom Andre Lauritsen</td><td>99594985</td><td>Tore-Jan Jordan</td><td>99500792</td></tr><tr><td><strong>J17</strong></td><td>2009</td><td>Kristian Bundgaard</td><td>91341621</td><td>Kristian Bundgaard</td><td>91341621</td></tr><tr><td><strong>J16</strong></td><td>2010</td><td>Kristine Wøien</td><td>95206683</td><td>Nikolai Klausen Engan</td><td>92865117</td></tr><tr><td><strong>J15</strong></td><td>2011</td><td>Malin Ræstad</td><td>95836816</td><td>Haakon Eikenes</td><td>95232208</td></tr><tr><td><strong>J14</strong></td><td>2012</td><td>Nikolai Klausen Engan</td><td>92865117</td><td>Nikolai Klausen Engan</td><td>92865117</td></tr><tr><td><strong>J13 Asker-Gui</strong></td><td>2013</td><td>Tina Rahman</td><td>99798291</td><td>Ibraheem Jamal</td><td>95492511</td></tr><tr><td><strong>J12</strong></td><td>2014</td><td>Trine K Hviding</td><td>46829656</td><td>Kjetil Wiig</td><td>98603049</td></tr><tr><td><strong>J11</strong></td><td>2015</td><td>Jarle Sjo-Nilsen</td><td>90841561</td><td>Christian Hundvin</td><td>48268704</td></tr><tr><td><strong>J10</strong></td><td>2016</td><td>Marianne B.Sommerfeldt</td><td>92830332</td><td>Are Hansen</td><td>93266449</td></tr><tr><td><strong>J09</strong></td><td>2017</td><td>Petter Bø</td><td>45474053</td><td>Thomas S Hyberg</td><td>98286210</td></tr><tr><td><strong>J08 Hvit</strong></td><td>2018</td><td>Stine Eikum</td><td>90190228</td><td>Tore Møller</td><td>90875138</td></tr><tr><td><strong>J08 Blå</strong></td><td>2018</td><td>Haakon Gunnerud</td><td>97952820</td><td>Pål A Pedersen</td><td>93601041</td></tr><tr><td><strong>J06 Hvit</strong></td><td>2020</td><td>Marius L. Igesund</td><td>48077566</td><td>Marius L. Igesund</td><td>48077566</td></tr></tbody></table>
+  </div>
+
+  <a class="back" href="index.html">&larr; Tilbake til alle aktiviteter</a>
+</div>
+<footer>Fritidsaktiviteter i Asker</footer>
+</body>
+</html>
