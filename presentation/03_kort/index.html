@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anders Jansson</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", SegoeUI, Roboto, Helvetica, Arial, sans-serif;
+         background: #f6f7f9; color: #1f2937; line-height: 1.6;
+         max-width: 880px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+  header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+           border-bottom: 1px solid #e5e7eb; padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+  h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; }
+  nav a { color: #2563eb; text-decoration: none; margin-left: 1.25rem; font-size: 0.95rem; }
+  nav a:hover { text-decoration: underline; }
+  h2 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; margin: 2.2rem 0 0.9rem; }
+  p { margin-bottom: 1.1rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
+  .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1.25rem 1.25rem; }
+  .card h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+  .card p { font-size: 0.9rem; color: #4b5563; margin-bottom: 0.7rem; }
+  .card a { color: #2563eb; font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+  .card a:hover { text-decoration: underline; }
+  .facts { display: flex; flex-wrap: wrap; gap: 1.75rem; margin-top: 0.5rem; }
+  .facts div { font-size: 0.95rem; color: #374151; }
+  footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb; font-size: 0.85rem; color: #9ca3af; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Anders Jansson</h1>
+  <nav>
+    <a href="/aktiviteter_asker/">Aktiviteter</a>
+    <a href="https://plattinger.no" target="_blank" rel="noopener">Plattinger</a>
+    <a href="mailto:mig@andersjansson.dev">Kontakt</a>
+  </nav>
+</header>
+
+<h2>Om</h2>
+<p>Jag är en systemutvecklare som bor i Asker, Norge — svensk med en förkärlek för att automatisera och bygga praktiska verktyg i Python. Just nu fokuserar jag främst på projekt som gör skillnad på lokal nivå.</p>
+<p>Med mer än 60 besökta länder i bagaget tar jag gärna itu med nya utmaningar — nu senast att lära mig mandarin.</p>
+
+<h2>Projekt</h2>
+<div class="cards">
+  <div class="card">
+    <h3>Aktiviteter i Asker</h3>
+    <p>Över 160 idrotts- och kulturaktiviteter i Asker, med sök, filter och avstånd från din egen adress.</p>
+    <a href="/aktiviteter_asker/">Öppna →</a>
+  </div>
+  <div class="card">
+    <h3>Plattinger</h3>
+    <p>Det jag bygger och driver under plattinger.no – projekt, experiment och verktyg.</p>
+    <a href="https://plattinger.no" target="_blank" rel="noopener">Besök →</a>
+  </div>
+  <div class="card">
+    <h3>Jobbdatabas</h3>
+    <p>Automatiserad insamling av IT/tech-jobb i Norge med filtrering och dagliga uppdateringar.</p>
+    <a href="mailto:mig@andersjansson.dev">Fråga →</a>
+  </div>
+</div>
+
+<h2>Några fakta</h2>
+<div class="facts">
+  <div>Bor i <strong>Asker</strong></div>
+  <div>60+ <strong>länder</strong></div>
+  <div><strong>Python</strong> &amp; automation</div>
+  <div>Svensk, norskt, lite <strong>mandarin</strong></div>
+</div>
+
+<footer>Statisk. Ingen databas. Byggd för att lasta snabbt.</footer>
+</body>
+</html>
