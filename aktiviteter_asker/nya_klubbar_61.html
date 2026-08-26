@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>61 nye klubber - Asker idrettskatalog</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: #2c5f2d;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        .stat-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c5f2d;
+        }
+        .stat-box .label {
+            color: #666;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #2c5f2d;
+            border-bottom: 2px solid #2c5f2d;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+        }
+        tr:hover { background: #f5f5f5; }
+        .url-link {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .url-link:hover { text-decoration: underline; }
+        .no-url { color: #999; font-style: italic; }
+        .kommune-link {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .badge-own { background: #e8f5e9; color: #2e7d32; }
+        .badge-kommune { background: #fff3e0; color: #ef6c00; }
+        .badge-none { background: #ffebee; color: #c62828; }
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .duplicate-alert {
+            background: #ffebee;
+            border-left: 4px solid #c62828;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        .duplicate-alert h3 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            th, td { padding: 8px 10px; font-size: 0.9em; }
+            header h1 { font-size: 1.6em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>61 nye klubber - Asker idrettskatalog</h1>
+            <p>Klubber funnet i Asker kommunes register som mangler i katalogen (askeridrett.no)</p>
+            <p><em>Generert: 2026-08-26 | Oppdatert: Asker Aliens fjernet (dublett)</em></p>
+        </header>
+
+        <div class="duplicate-alert">
+            <h3>Dublett fjernet</h3>
+            <p><strong>Asker Aliens</strong> (basketball) fantes allerede i katalogen som "Asker Aliens - Herrer og Damer". Fjernet fra listen.</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="number">61</div>
+                <div class="label">Totalt nye klubber</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">23</div>
+                <div class="label">Med egen nettside</div>
+            </div>
+            <div class="stat-box">
+                <div class="number">38</div>
+                <div class="label">Uten egen nettside</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Fullstendig liste over klubber</h2>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="badge badge-own">Egen nettside</span>
+                    <span>Klubben har egen hjemmeside</span>
+                </div>
+                <div class="legend-item">
+                    <span class="badge badge-kommune">Kun kommunens side</span>
+                    <span>Kun oppføring i kommunens register</span>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Klubbnavn</th>
+                        <th>Nettside</th>
+                        <th>Kilde</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Advania Norge Bedriftsidrettslag</td><td><a href="http://www.advania.no/" class="url-link">advania.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>2</td><td>Ak Fryktløs</td><td><a href="http://www.fryktlos.no" class="url-link">fryktlos.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>3</td><td>Asker Azad Sports & Culture Club</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>4</td><td>Asker Biljardklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>5</td><td>Askerbøringene IL</td><td><a href="http://www.askerboringene.no" class="url-link">askerboringene.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>6</td><td>Asker Bryteklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>7</td><td>Asker Cykleklubb</td><td><a href="http://asker-ck.no/" class="url-link">asker-ck.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>8</td><td>Asker Fleridrettslag</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>9</td><td>Asker Functional Fitnessklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>10</td><td>Asker Helsesportlag</td><td><a href="http://www.askerhelsesportlag.no" class="url-link">askerhelsesportlag.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>11</td><td>Asker Jeger Og Fiskeforening</td><td><a href="http://www.asker-jff.no" class="url-link">asker-jff.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>12</td><td>Asker Kunstløp Klubb Akk</td><td><a href="http://www.akk.no" class="url-link">akk.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>13</td><td>Asker Miniracing Club</td><td><a href="http://www.amrc.no" class="url-link">amrc.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>14</td><td>Asker Modellklubb</td><td><a href="http://askermodellklubb.no" class="url-link">askermodellklubb.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>15</td><td>Asker Skyteklubb</td><td><a href="http://www.askerskyteklubb.no" class="url-link">askerskyteklubb.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>16</td><td>Asker Trekkhundklubb</td><td><a href="http://asker-trekkhundklubb.webnode.com/" class="url-link">webnode.com</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>17</td><td>Asker Og Omegn Rytterforening</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>18</td><td>Borgen Karateklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>19</td><td>Dolphin Masters Svømmeklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>20</td><td>Fekteklubben Frie Duellister</td><td><a href="http://www.frieduellister.no" class="url-link">frieduellister.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>21</td><td>Frisk Superlag</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>22</td><td>Hagahogget Lømlag</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>23</td><td>Hard Intensiv Trening (HIT)</td><td><a href="http://www.hitrening.no" class="url-link">hitrening.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>24</td><td>Holmenparken Idrettslag</td><td><a href="http://www.holmenparken.no" class="url-link">holmenparken.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>25</td><td>Hurum Croquet Klubb</td><td><a href="http://hurumcroquet.no" class="url-link">hurumcroquet.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>26</td><td>Hurum Krav Maga Klubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>27</td><td>Landøya IL</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>28</td><td>Løkka 1-2-3</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>29</td><td>NMK Asker</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>30</td><td>Norcana Idrettsforening</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>31</td><td>Nordlys Cricketklubb Asker</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>32</td><td>Nordmarka Skiorienteringsklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>33</td><td>Nordpolen Cricket Klubb Asker</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>34</td><td>Norsk If-Båt Klubb</td><td><a href="http://www.ifklubben.no" class="url-link">ifklubben.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>35</td><td>Ølnesseter Velforening</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>36</td><td>Ølstad Modellflyklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>37</td><td>Oslofjordens Friluftsråd</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>38</td><td>Proxdrive Racing Team</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>39</td><td>Red Crown BK</td><td><a href="http://klubber.bowling.no/red_crown_bk/" class="url-link">bowling.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>40</td><td>Royal Sport</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>41</td><td>Røyken Cricket Klubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>42</td><td>Røyken Cykleklubb</td><td><a href="http://Cykleklubb.no" class="url-link">cykleklubb.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>43</td><td>Røyken Handicapidrettslag</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>44</td><td>Røyken Og Hurum Modellflyklubb</td><td><a href="http://www.rhmfk.org" class="url-link">rhmfk.org</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>45</td><td>Røyken Og Omegn Rideklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>46</td><td>Røyken Orienteringslag</td><td><a href="http://www.roykenolag.no" class="url-link">roykenolag.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>47</td><td>Røyken Sportsdykkerklubb</td><td><a href="http://www.rsdk.no" class="url-link">rsdk.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>48</td><td>Sætre Innebandy</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>49</td><td>Sætre Skateklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>50</td><td>Slemmestad Brettklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>51</td><td>Slemmestad Kajakklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>52</td><td>Spuvi</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>53</td><td>Sunyata Aikido Dojo</td><td><a href="http://www.sunyata.no" class="url-link">sunyata.no</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>54</td><td>Tangen Watt Og Oksygen Cykleklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>55</td><td>Team Cyan Øst</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>56</td><td>Tofte Idrettslag</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>57</td><td>Toneriko-Kai Norge</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>58</td><td>Veteranenes Fallskjermklubb</td><td><a href="http://www.fallskjermveteranene.com" class="url-link">fallskjermveteranene.com</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>59</td><td>Viken Hockey Solid</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                    <tr><td>60</td><td>Vingtor RC Club</td><td><a href="http://www.vingtor.org/" class="url-link">vingtor.org</a></td><td><span class="badge badge-own">Egen</span></td></tr>
+                    <tr><td>61</td><td>Warya Idrettsklubb</td><td><span class="no-url">-</span></td><td><span class="badge badge-kommune">Kommune</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Om dataene</h2>
+            <p>Kilde: Asker kommunes register over lag og foreninger (frivillighet-og-innbyggersamarbeid/lag-og-foreninger/idrett/)</p>
+            <p>Klubber markert med <span class="badge badge-kommune">Kommune</span> har kun oppføring i kommunens register uten egen hjemmeside registrert.</p>
+            <p>Klubber markert med <span class="badge badge-own">Egen</span> har registrert egen nettside i kommunens register.</p>
+        </div>
+
+        <div class="footer">
+            <p>Generert for askeridrett.no | Kontakt: Anders Jansson</p>
+        </div>
+    </div>
+</body>
+</html>
