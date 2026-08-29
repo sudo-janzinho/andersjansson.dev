@@ -29,7 +29,6 @@ A browser that **never saves anything about you** and that you can actually **un
 | **Safe Browsing disabled** | ✅ | No URL hashes sent to Google |
 | **GPU acceleration disabled** | ✅ | Stable without crashes |
 | **Live counter** | ✅ | Shows number of blocked trackers in real-time |
-| **Startpage with bookmarks** | ✅ | VG.no, Aftonbladet, Yr.no, YouTube, Samnytt |
 | **Tor integration** | ✅ | Auto-detect, proxy enforcement, status indicator |
 
 ---
@@ -184,7 +183,7 @@ grep -i "http\|socket\|request" mybrowser.py
 | 0.2 | 2026-08-29 | Permanent incognito, tracker blocking |
 | 0.3 | 2026-08-29 | Fingerprint spoofing, Safe Browsing disabled |
 | 0.4 | 2026-08-29 | GPU acceleration disabled (stability) |
-| 0.5 | 2026-08-29 | Startpage with bookmarks, live counter |
+| **0.5** | **2026-08-29** | **Live counter, startpage** |
 | **0.6** | **2026-08-29** | **Tor integration: auto-detect, proxy enforcement, status indicator** |
 
 ---
