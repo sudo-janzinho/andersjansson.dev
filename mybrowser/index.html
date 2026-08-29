@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mybrowser — The browser that never saves anything about you</title>
+<meta name="description" content="A private, secure browser in Python. 12 KB code, Tor integration, fingerprint-spoofing and full transparency.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0C10;
+    --surface: #12151B;
+    --surface-2: #171B22;
+    --border: #232830;
+    --text: #E6E9EE;
+    --muted: #7C8695;
+    --accent: #6EA8FE;
+    --signal: #FFD166;
+    --success: #4ADE80;
+    --danger: #F87171;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.15;
+    z-index: -1;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-family: var(--mono);
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--muted) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: clamp(18px, 3vw, 22px);
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 40px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .btn-primary:hover {
+    background: #8FC4FF;
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    background: var(--surface-2);
+    border-color: var(--accent);
+  }
+
+  .stats {
+    padding: 100px 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 48px;
+    font-weight: 800;
+    font-family: var(--mono);
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .features {
+    padding: 120px 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-tag {
+    display: inline-block;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 16px;
+  }
+
+  .section-header h2 {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .section-header p {
+    color: var(--muted);
+    font-size: 18px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.2s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+
+  .feature-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .feature-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .feature-card p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .comparison {
+    padding: 120px 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comparison-table th {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .comparison-table td {
+    font-size: 16px;
+  }
+
+  .comparison-table tr:hover {
+    background: var(--surface-2);
+  }
+
+  .check { color: var(--success); font-weight: bold; }
+  .cross { color: var(--danger); font-weight: bold; }
+  .warn { color: var(--signal); font-weight: bold; }
+
+  .highlight-row {
+    background: rgba(110, 168, 254, 0.1);
+    border-left: 3px solid var(--accent);
+  }
+
+  .tor-section {
+    padding: 120px 0;
+    text-align: center;
+  }
+
+  .tor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-family: var(--mono);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .tor-status {
+    width: 10px;
+    height: 10px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .download {
+    padding: 120px 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .download-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 60px 40px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .download-box h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .download-box p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+
+  .code-block {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    color: var(--accent);
+  }
+
+  .audit-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .audit-box strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .audit-box p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  footer {
+    padding: 60px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 100px 24px 60px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .comparison-table { font-size: 14px; }
+    .comparison-table th, .comparison-table td { padding: 12px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<section class="hero">
+  <div class="container">
+    <span class="hero-badge">🦾 Built by Anders Jansson</span>
+    <h1>The browser that<br>never saves anything about you</h1>
+    <p>
+      mybrowser is a private, secure browser in Python. 
+      12 KB code, Tor integration, fingerprint-spoofing and full transparency. 
+      No traces. No hidden telemetry.
+    </p>
+    <div class="hero-cta">
+      <a href="#download" class="btn btn-primary">⬇ Get started</a>
+      <a href="#features" class="btn btn-ghost">📖 Learn more</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">12 KB</div>
+        <div class="stat-label">Code size</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">318</div>
+        <div class="stat-label">Lines of code</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Open source</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">AI</div>
+        <div class="stat-label">Audited</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Features</span>
+      <h2>Everything you need for private browsing</h2>
+      <p>Built from the ground up with privacy as priority #1</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Permanent incognito</h3>
+        <p>Everything is stored in RAM and erased on close. No history, no cookies, no cache on disk.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🧅</div>
+        <h3>Tor integration</h3>
+        <p>Auto-detects Tor Browser and forces all traffic through the Tor network. Your IP is always hidden.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🎭</div>
+        <h3>Fingerprint spoofing</h3>
+        <p>Randomizes your digital fingerprint every start (OS, screen, language, WebGL). Looks different every time.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🚫</div>
+        <h3>Tracker blocking</h3>
+        <p>Blocks Google Analytics, Facebook pixel, reCAPTCHA and 40+ other trackers automatically.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Safe Browsing disabled</h3>
+        <p>No URL hashes sent to Google. No background checking of your visited pages.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI-audited code</h3>
+        <p>Every line has been AI-audited. We strongly recommend running your own AI audit to verify everything yourself.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Live counter</h3>
+        <p>See in real-time how many trackers have been blocked during your session. Transparent and visible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="comparison">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Comparison</span>
+      <h2>mybrowser vs. Brave vs. Chrome</h2>
+      <p>Honest comparison without marketing speak</p>
+    </div>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>mybrowser</th>
+          <th>Brave</th>
+          <th>Chrome</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong>Code size</strong></td>
+          <td><span class="check">12 KB (318 lines)</span></td>
+          <td><span class="warn">~25 MB (400K+ lines)</span></td>
+          <td><span class="warn">~500 MB</span></td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>Auditable code</strong></td>
+          <td><span class="check">✅ Small enough to read in an evening</span></td>
+          <td><span class="warn">⚠️ Large codebase</span></td>
+          <td><span class="warn">⚠️ Very large</span></td>
+        </tr>
+        <tr>
+          <td>Permanent incognito</td>
+          <td><span class="check">✅ Always on</span></td>
+          <td><span class="warn">⚠️ Manual mode</span></td>
+          <td><span class="warn">⚠️ Manual mode</span></td>
+        </tr>
+        <tr>
+          <td>Tor integration</td>
+          <td><span class="check">✅ Auto-detect + proxy</span></td>
+          <td><span class="check">✅ Tor window</span></td>
+          <td><span class="cross">❌ No</span></td>
+        </tr>
+        <tr>
+          <td>Fingerprint spoofing</td>
+          <td><span class="check">✅ Randomized every start</span></td>
+          <td><span class="check">✅ Randomization</span></td>
+          <td><span class="cross">❌ No</span></td>
+        </tr>
+        <tr>
+          <td>Tracker blocking</td>
+          <td><span class="check">✅ 40+ domains</span></td>
+          <td><span class="check">✅ Brave Shields</span></td>
+          <td><span class="cross">❌ No</span></td>
+        </tr>
+        <tr>
+          <td>Safe Browsing (Google)</td>
+          <td><span class="check">✅ Disabled</span></td>
+          <td><span class="warn">⚠️ Can be disabled</span></td>
+          <td><span class="check">✅ Enabled</span></td>
+        </tr>
+        <tr>
+          <td>Recommendation</td>
+          <td><span class="check">✅ Audit with AI</span></td>
+          <td><span class="warn">⚠️ Trust community</span></td>
+          <td><span class="warn">⚠️ Trust vendor</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="tor-section">
+  <div class="container">
+    <div class="tor-badge">
+      <span class="tor-status"></span>
+      <span>🟢 Tor active — your IP is hidden</span>
+    </div>
+    <h2 style="font-size: 36px; margin-bottom: 16px;">Real anonymity</h2>
+    <p style="color: var(--muted); max-width: 600px; margin: 0 auto 32px;">
+      mybrowser auto-detects Tor Browser and forces all traffic through the Tor network. 
+      Your IP address, location and identity are hidden from websites you visit.
+    </p>
+    <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 40px;">
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; min-width: 200px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">🔐</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">3 encryption layers</div>
+        <div style="color: var(--muted); font-size: 14px;">Your traffic encrypted 3 times</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; min-width: 200px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">🌐</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">3 nodes</div>
+        <div style="color: var(--muted); font-size: 14px;">Traffic routed through 3 servers</div>
+      </div>
+      <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; min-width: 200px;">
+        <div style="font-size: 32px; margin-bottom: 8px;">🎯</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">No IP leak</div>
+        <div style="color: var(--muted); font-size: 14px;">Your real IP never visible</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="download" class="download">
+  <div class="container">
+    <div class="download-box">
+      <h2>Get started in 2 minutes</h2>
+      <p>No installation. No account. Just download and run.</p>
+
+      <div class="code-block">
+        <code>1. Download Tor Browser (required for Tor mode)</code><br>
+        <code>2. Start Tor Browser (keep it running)</code><br>
+        <code>3. Download mybrowser.py + mybrowser.bat</code><br>
+        <code>4. Double-click mybrowser.bat</code><br>
+        <code>5. Done! 🟢 Tor should show green in toolbar</code>
+      </div>
+
+      <div class="audit-box">
+        <strong>🤖 Important: Audit the code yourself</strong>
+        <p>
+          mybrowser is open source and AI-audited. But we strongly recommend that you 
+          <strong>run the code through your favorite AI</strong> (ChatGPT, Claude, etc.) to 
+          verify everything yourself. 318 lines only takes a few minutes to audit. 
+          Don't trust us — trust what you can verify yourself.
+        </p>
+      </div>
+
+      <div class="hero-cta" style="justify-content: center;">
+        <a href="README.md" class="btn btn-primary">📖 Read documentation</a>
+        <a href="CODE_EXPLANATION.md" class="btn btn-ghost">📄 Code explanation</a>
+      </div>
+
+      <p style="margin-top: 24px; font-size: 13px; color: var(--muted);">
+        Requires Python 3.8+ and PyQt6. All code is open — audit it yourself with AI before using.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>🦾 Built by <strong>Anders Jansson</strong> as part of the andersjansson.dev project.</p>
+    <p style="margin-top: 12px;">
+      <a href="README.md">Documentation</a> ·
+      <a href="CODE_EXPLANATION.md">Code explanation</a> ·
+      <a href="https://andersjansson.dev">Portfolio</a>
+    </p>
+    <p style="margin-top: 24px; font-size: 12px; color: var(--muted);">
+      mybrowser is open source under the MIT license. Use at your own risk.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
