@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fritidsaktiviteter i Asker - 197 tilbud</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   :root { --blue: #1a5fb4; --light: #f4f6f9; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,6 +38,8 @@
   .dist-badge { display: inline-block; margin-top: .4rem; font-size: .75rem; font-weight: 600; color: #0a7d33; background: #e6f6ec; padding: .15rem .5rem; border-radius: 12px; }
   .desc { font-size: .82rem; color: #555; margin-top: .6rem; line-height: 1.5; }
   .hidden { display: none !important; }
+  /* Kartbeholder: skjult visuelt, men ~beholder høyde~ så Leaflet kan måle den ved init. */
+  .map-collapsed { height: 0; overflow: hidden; padding: 0; margin: 0 !important; }
   footer { text-align: center; padding: 1.5rem; color: #888; font-size: .8rem; }
   /* URL-länkar visas på en rad, klipps med "..." om för långa */
   .contact .url-link {
@@ -46,6 +50,19 @@
     text-overflow: ellipsis;
     vertical-align: bottom;
   }
+  /* --- Kartvisning --- */
+  .view-switch { display: inline-flex; gap: .25rem; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.5); border-radius: 24px; padding: .25rem; }
+  .view-switch button { border: none; background: transparent; color: #fff; font-size: .85rem; font-weight: 600; padding: .45rem 1.1rem; border-radius: 20px; cursor: pointer; }
+  .view-switch button.active { background: #fff; color: var(--blue); }
+  #map-wrap { max-width: 1200px; margin: 1rem auto 2rem; padding: 0 1rem; }
+  #map { height: 560px; border-radius: 12px; box-shadow: 0 1px 6px rgba(0,0,0,.15); z-index: 0; }
+  .map-tip { font-size: .82rem; color: #666; margin-top: .4rem; }
+  .leaflet-container { font-family: 'Segoe UI', system-ui, sans-serif; }
+  .popup-club { font-weight: 700; color: var(--blue); }
+  .popup-link { display: inline-block; margin-top: .3rem; font-weight: 600; color: var(--blue); }
+  .cat-legend { max-width: 1200px; margin: .4rem 1rem 0; padding: 0 .4rem; font-size: .75rem; color: #666; display: flex; flex-wrap: wrap; gap: .6rem .9rem; }
+  .cat-legend span { display: inline-flex; align-items: center; gap: .3rem; }
+  .cat-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
 </style>
 </head>
 <body>
@@ -53,6 +70,10 @@
   <h1>Fritidsaktiviteter i Asker</h1>
   <p>Finn en aktivitet for deg eller barna dine – søk, filtrer eller søk i nærheten</p>
   <div style="margin-top:.8rem;"><a href="ny-klubb.html" style="display:inline-block;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.5);padding:.45rem 1rem;border-radius:20px;font-size:.85rem;font-weight:600;text-decoration:none;">Mangler en klubb? Legg den til her &rarr;</a></div>
+  <div style="margin-top:.8rem;"><div class="view-switch" id="view-switch" role="tablist" aria-label="Visningsmodus">
+    <button type="button" id="btn-list" class="active" role="tab" aria-selected="true">Liste</button>
+    <button type="button" id="btn-map" role="tab" aria-selected="false">Kart</button>
+  </div></div>
   <div class="controls">
     <input id="search" type="text" placeholder="Søk etter navn, aktivitet, adresse…" autocomplete="off">
     <select id="activity-filter"><option value="">Alle aktiviteter</option></select>
@@ -1804,6 +1825,14 @@
       </div>
     </div>
 
+    </div>
+
+    <div id="map-wrap" class="hidden">
+      <div class="cat-legend" id="cat-legend"></div>
+      <div id="map"></div>
+      <p class="map-tip">Kartet synkroniserer med søk og filter. Zoom inn for å se hver enkelt klubb. Trykk på en markør for mer info, eller knappen "Søk i nærheten" for å vise klubber rundt deg.</p>
+    </div>
+
     <footer>Kontaktpersoner kan være utdatert. Sjekk klubbens egen nettside for oppdatert info.<br><a href="ny-klubb.html" style="color:var(--blue);font-weight:600;">Mangler en klubb? Legg den til her &rarr;</a></footer>
 <script>
   const cards = [...document.querySelectorAll('.card')];
@@ -1888,6 +1917,116 @@
   dist.addEventListener('keydown', e => { if (e.key === 'Enter') useDist(); });
   home.addEventListener('keydown', e => { if (e.key === 'Enter') useDist(); });
   apply();
+  /* ============ KART ============ */
+  const mapWrap = document.getElementById('map-wrap');
+  const mapEl = document.getElementById('map');
+  const btnList = document.getElementById('btn-list');
+  const btnMap = document.getElementById('btn-map');
+  let map = null, markerLayer = null, mapInitialized = false;
+  let activeView = 'list';
+
+  const CAT_COLORS = {
+    'fotball':'#e74c3c','basketball':'#e67e22','handball':'#d35400','innebandy':'#c0392b',
+    'volleyball':'#8e44ad','badminton':'#9b59b6','tennis':'#6c3483','taekwondo':'#2e86c1',
+    'kickboxing':'#2874a6','karate':'#5dade2','boksing':'#1abc9c','judo':'#16a085',
+    'fekting':'#27ae60','kunstløp':'#f1c40f','skøyter':'#f39c12','langrenn':'#3498db',
+    'alpint':'#5dade2','sykling':'#16a085','friluftsliv':'#27ae60','speiderne':'#229954',
+    'korps':'#d4ac0d','musikk':'#eb984e','dans':'#af7ac5','drill':'#c39bd3',
+    'teater':'#dc7633','svømming':'#2e86c1','seiling':'#148f77','roing':'#117864',
+    'klatring':'#6c3483','golf':'#229954','ishockey':'#c0392b','bandy':'#5dade2',
+    'innebandy2':'#7d3c98','ski':'#3498db','orientering':'#1f618d','jakt':'#145a32',
+    'fiske':'#1a5276','sjakk':'#34495e'
+  };
+  const fallbackColors = ['#1a5fb4','#e74c3c','#27ae60','#f39c12','#8e44ad','#16a085','#c0392b','#2e86c1','#d4ac0d','#e67e22'];
+  const catColor = new Map();
+  let color_i = 0;
+  function colorFor(act){ act = (act||'').toLowerCase(); if(catColor.has(act)) return catColor.get(act); const c = CAT_COLORS[act] || fallbackColors[color_i++ % fallbackColors.length]; catColor.set(act,c); return c; }
+
+  function initMap() {
+    if (mapInitialized) return;
+    if (typeof L === 'undefined') { mapEl.innerHTML = '<p style="padding:1rem;">Kart kunne ikke lastes (Leaflet manglet). Listen fungerer som normalt.</p>'; mapWrap.classList.remove('hidden'); return; }
+    map = L.map('map').setView([59.83, 10.44], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    mapInitialized = true;
+    setMapViewport();
+  }
+
+  function setMapViewport() { if (map) setTimeout(() => map.invalidateSize(), 60); }
+
+  function buildMarkers() {
+    if (!map) return;
+    if (markerLayer) { map.removeLayer(markerLayer); markerLayer = null; }
+    const group = L.layerGroup();
+    const shown = [];
+    cards.forEach(c => {
+      const show = !c.classList.contains('hidden');
+      if (!show || !c.dataset.lat) return;
+      const col = colorFor(c.dataset.activity);
+      const icon = L.divIcon({ html: '<div style="width:22px;height:22px;border-radius:50%;background:' + col + ';border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);"></div>', className:'', iconSize:[22,22], iconAnchor:[11,11] });
+      const a = c.querySelector('a[href$=".html"]');
+      const href = a ? a.getAttribute('href') : '#';
+      const badge = c.querySelector('.emoji-badge');
+      const emoji = badge ? badge.textContent.trim() : '';
+      const m = L.marker([parseFloat(c.dataset.lat), parseFloat(c.dataset.lon)], { icon: icon });
+      m.bindPopup('<div style="min-width:160px;"><span style="font-size:1.15rem;">'+emoji+'</span> <span class="popup-club">' + escapeHtml(c.querySelector('h3').textContent) + '</span><br><span style="font-size:.85rem;color:#555;">' + escapeHtml(c.dataset.activity) + '</span><br><span style="font-size:.8rem;color:#777;">' + escapeHtml(c.dataset.address||'') + '</span><br><a class="popup-link" href="' + href + '">Mer info &rarr;</a></div>');
+      group.addLayer(m);
+      shown.push(m);
+    });
+    markerLayer = group;
+    group.addTo(map);
+    if (shown.length > 0) {
+      const g = L.featureGroup(shown);
+      if (mapInitialized) { try { map.fitBounds(g.getBounds().pad(0.1), { maxZoom: 14 }); } catch(e){} }
+    }
+  }
+
+  function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function updateMap() { if (mapInitialized) buildMarkers(); }
+
+  function setView(v) {
+    const isMap = v === 'map';
+    if (isMap) {
+      grid.classList.add('hidden');
+      mapWrap.classList.remove('hidden');
+      // Eksplisitt hoyde pa wrappern gjor at #map blir malbar for Leaflet
+      mapWrap.style.height = '560px';
+      mapWrap.style.overflow = 'visible';
+      mapWrap.style.margin = '0';
+      mapWrap.style.padding = '0';
+      void mapWrap.offsetHeight;   // tving reflow for Leaflet maaler hoyden
+      initMap();
+      if (map) map.invalidateSize();
+      buildMarkers();
+    } else {
+      grid.classList.remove('hidden');
+      mapWrap.classList.add('hidden');
+      mapWrap.style.height = '';
+      mapWrap.style.overflow = '';
+      mapWrap.style.margin = '';
+      mapWrap.style.padding = '';
+    }
+    btnList.classList.toggle('active', !isMap);
+    btnMap.classList.toggle('active', isMap);
+    btnList.setAttribute('aria-selected', String(!isMap));
+    btnMap.setAttribute('aria-selected', String(isMap));
+    setMapViewport();
+  }  btnMap.addEventListener('click', () => { activeView = 'map'; setView('map'); });
+  btnList.addEventListener('click', () => { activeView = 'list'; setView('list'); });
+
+  // Legg til kategorilegend
+  (function(){
+    const leg = document.getElementById('cat-legend');
+    const acts = Array.from(new Set(cards.map(c => (c.dataset.activity||'').toLowerCase()).filter(Boolean))).sort();
+    acts.forEach(a => { const s = document.createElement('span'); const d = document.createElement('span'); d.className='cat-dot'; d.style.background = colorFor(a); s.appendChild(d); s.appendChild(document.createTextNode(' ' + a)); leg.appendChild(s); });
+  })();
+
+  // wrapper apply() så kartet alltid er synkronisert
+  const origApply = apply;
+  apply = function(){ origApply(); updateMap(); };
 </script>
 </body>
 </html>
