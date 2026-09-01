@@ -82,6 +82,7 @@
     <input id="home" type="text" placeholder="Din adresse (f.eks. Bekkestua)" autocomplete="off">
     <input id="dist" type="number" min="1" max="200" placeholder="km" title="Maks avstand i km">
     <button onclick="useDist()" style="padding:.7rem 1.2rem;font-size:1rem;border:2px solid #fff;background:#fff;color:var(--blue);border-radius:8px;cursor:pointer;font-weight:600;">Søk i nærheten</button>
+    <button onclick="useGeo()" style="padding:.7rem 1.2rem;font-size:1rem;border:2px solid #fff;background:rgba(255,255,255,.18);color:#fff;border-radius:8px;cursor:pointer;font-weight:600;">Bruk min plassering</button>
   </div>
 </header>
 <div class="count" id="count"></div>
@@ -1871,6 +1872,25 @@
     return null;
   }
 
+  async function useGeo() {
+    if (!navigator.geolocation) { alert('Nettleseren din støtter ikke geolokalisering.'); return; }
+    const km = parseFloat(dist.value);
+    if (!km) { alert('Fyll inn maks avstand i km først.'); return; }
+    count.textContent = 'Henter din plassering...';
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        homePos = { lat: pos.coords.latitude, lon: pos.coords.longitude, label: 'Min plassering' };
+        maxKm = km;
+        home.value = pos.coords.latitude.toFixed(5) + ', ' + pos.coords.longitude.toFixed(5);
+        count.textContent = 'Plassering hentet. Søker i nærheten...';
+        apply();
+      },
+      (err) => {
+        count.textContent = 'Kunne ikke hente plassering: ' + (err.message || err.code);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+    );
+  }
   async function useDist() {
     const addr = home.value.trim();
     const km = parseFloat(dist.value);
