@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Endre klubbinfo | Fritidsaktiviteter i Asker</title>
+<style>
+  :root { --blue: #1a5fb4; --light: #f4f6f9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--light); color: #222; }
+  header { background: var(--blue); color: #fff; padding: 2rem 1rem 1.5rem; text-align: center; }
+  header h1 { font-size: 1.6rem; margin-bottom: .3rem; }
+  header p { opacity: .9; font-size: .95rem; }
+  .container { max-width: 700px; margin: 2rem auto; padding: 0 1rem; }
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); padding: 1.5rem; }
+  .card h2 { font-size: 1.3rem; color: var(--blue); margin-bottom: .3rem; }
+  .intro { font-size: .9rem; color: #555; margin-bottom: 1.3rem; line-height: 1.5; }
+  form label { display: block; font-size: .85rem; font-weight: 600; color: #333; margin: 1rem 0 .3rem; }
+  form label span.req { color: #c0392b; }
+  form input { width: 100%; padding: .7rem .8rem; font-size: .95rem; border: 2px solid #ccc; border-radius: 8px; font-family: inherit; }
+  form input:focus { outline: none; border-color: var(--blue); }
+  .hint { font-size: .78rem; color: #888; margin-top: .25rem; }
+  .submit-row { margin-top: 1.5rem; }
+  button[type=submit] { width: 100%; padding: .9rem 1rem; font-size: 1.05rem; font-weight: 700; color: #fff; background: var(--blue); border: none; border-radius: 8px; cursor: pointer; }
+  button[type=submit]:hover { background: #144b8f; }
+  .status { margin-top: 1rem; padding: .9rem 1rem; border-radius: 8px; font-size: .9rem; display: none; }
+  .status.ok { display: block; background: #e6f6ec; color: #0a7d33; border: 1px solid #b7e3c6; }
+  .status.err { display: block; background: #fdecea; color: #b02a37; border: 1px solid #f3b4b4; }
+  .back { display: inline-block; margin-top: 1.5rem; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .back:hover { text-decoration: underline; }
+  footer { text-align: center; padding: 1.5rem; color: #888; font-size: .8rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Fritidsaktiviteter i Asker</h1>
+  <p>Endre klubbinfo</p>
+</header>
+<div class="container">
+  <div class="card">
+    <h2>Endre klubbinfo</h2>
+    <p class="intro">Fyll inn informasjonen under, så endrer vi den. Vi tar kun kontakt om vi trenger mer informasjon.</p>
+
+    <form id="endre-klubbinfo-form" action="https://formspree.io/f/mwlejaey" method="POST">
+      <input type="hidden" name="_subject" value="Endre klubbinfo">
+      <label for="klubbnavn">Klubbnavn <span class="req">*</span></label>
+      <input type="text" id="klubbnavn" name="klubbnavn" required placeholder="F.eks. Asker Judoklubb">
+
+      <label for="aktivitet">Aktivitet / idrett <span class="req">*</span></label>
+      <input type="text" id="aktivitet" name="aktivitet" required placeholder="F.eks. Judo">
+
+      <label for="adresse">Adresse / møtested</label>
+      <input type="text" id="adresse" name="adresse" placeholder="F.eks. Solvangveien 32, 1383 Asker">
+
+      <label for="nettside">Nettside</label>
+      <input type="url" id="nettside" name="nettside" placeholder="https://…">
+
+      <div class="submit-row">
+        <button type="submit">Send inn</button>
+      </div>
+      <div class="status" id="status"></div>
+    </form>
+  </div>
+  <a class="back" href="index.html">&larr; Tilbake til alle aktiviteter</a>
+</div>
+<footer>Fritidsaktiviteter i Asker</footer>
+
+<script>
+  const form = document.getElementById('endre-klubbinfo-form');
+  const status = document.getElementById('status');
+
+  // Forhåndsutfyll klubbnavn fra ?klubb=... i URL-en (satt av "Endre klubbinfo"-lenken på hver underside)
+  const params = new URLSearchParams(window.location.search);
+  const klubb = params.get('klubb');
+  if (klubb) {
+    document.getElementById('klubbnavn').value = klubb;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.className = 'status';
+    status.textContent = '';
+    const btn = form.querySelector('button[type=submit]');
+    btn.disabled = true;
+    btn.textContent = 'Sender…';
+    try {
+      const data = new FormData(form);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        status.className = 'status ok';
+        status.textContent = 'Takk! Meldingen er sendt. Vi oppdaterer informasjonen så snart som mulig.';
+        form.reset();
+      } else {
+        status.className = 'status err';
+        status.textContent = 'Noe gikk galt. Prøv igjen, eller send e-post til oss direkte.';
+      }
+    } catch (err) {
+      status.className = 'status err';
+      status.textContent = 'Ingen tilkobling. Sjekk internett og prøv igjen.';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Send inn';
+  });
+</script>
+</body>
+</html>
